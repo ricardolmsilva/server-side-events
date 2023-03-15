@@ -1,10 +1,19 @@
 var express = require("express");
+const path = require("path");
 var app = express();
 
 app.use(express.json());
 app.use(express.static("public"));
 
 const clients = new Set();
+
+app.get("/", (req, res) => {
+  try {
+    res.sendFile("index.html", { root: path.join(__dirname, "public") });
+  } catch (error) {
+    console.error(error);
+  }
+});
 
 app.get("/events", (req, res) => {
   res.setHeader("Content-Type", "text/event-stream");
