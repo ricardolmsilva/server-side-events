@@ -1,7 +1,7 @@
 var express = require("express");
-const PORT = process.env.PORT || 3000;
-
 var app = express();
+
+app.use(express.json());
 app.use(express.static("public"));
 
 const clients = new Set();
@@ -37,6 +37,7 @@ app.post("/remove-key/:leaderName", (req, res) => {
   res.status(200).send({ message: "Key removal event sent." });
 });
 
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
