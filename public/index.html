@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SSE Key Removal</title>
+
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 30px;
+        min-height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Ken's testing environment</h1>
+    <input
+      id="leaderName"
+      type="text"
+      value=""
+      placeholder="Insert leader name"
+    />
+    <button id="removeLeader">Send event</button>
+
+    <script>
+      const removeLeaderButton = document.getElementById("removeLeader");
+      const leaderNameInput = document.getElementById("leaderName");
+
+      const source = new EventSource("/events");
+
+      source.addEventListener("message", (event) => {
+        console.log("event triggered");
+        const parsedData = JSON.parse(event.data);
+        alert(`Key removed by the leader: ${parsedData.leaderName}`);
+      });
+
+      removeLeaderButton.addEventListener("click", async () => {
+        const leaderName = leaderNameInput.value;
+        if (leaderName) {
+          const response = await fetch(`/remove-key/${leaderName}`, {
+            method: "POST",
+          });
+          const data = await response.json();
+          console.log(data);
+        } else {
+          alert("Please enter a leader name.");
+        }
+      });
+    </script>
+  </body>
+</html>
