@@ -6,6 +6,14 @@ app.use(express.static("public"));
 
 const clients = new Set();
 
+app.get("/", (req, res) => {
+  try {
+    res.sendFile("index.html", { root: path.join(__dirname, "public") });
+  } catch (error) {
+    console.error(error);
+  }
+});
+
 app.get("/events", (req, res) => {
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache");
